@@ -2,170 +2,270 @@
 <html lang="es">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Para Alejita 🌸</title>
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#2a1442">
+<title>Para Alejita ✨</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@600;700&family=Quicksand:wght@400;500;600&display=swap" rel="stylesheet">
 <style>
-  :root{
-    --rosa:#ffb6c8; --rosa2:#ff8fab; --crema:#fff6f0; --lila:#e8d5ff; --txt:#6b3a4a;
-  }
-  *{box-sizing:border-box;margin:0;padding:0}
-  html,body{min-height:100%}
+  @property --c1{syntax:'<color>';inherits:true;initial-value:#1b0f2e}
+  @property --c2{syntax:'<color>';inherits:true;initial-value:#3b1a55}
+  @property --c3{syntax:'<color>';inherits:true;initial-value:#7a3a78}
+  :root{--c1:#1b0f2e;--c2:#3b1a55;--c3:#7a3a78;transition:--c1 2s,--c2 2s,--c3 2s}
+  *{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
+  html,body{height:100%;overflow:hidden;touch-action:manipulation}
   body{
-    font-family:'Quicksand',sans-serif; color:var(--txt);
-    background:linear-gradient(160deg,#ffe3ec 0%,#fff0e6 45%,#ecdcff 100%);
-    background-attachment:fixed; overflow-x:hidden;
+    font-family:'Quicksand',sans-serif;color:#fff;
+    background:linear-gradient(180deg,var(--c1) 0%,var(--c2) 55%,var(--c3) 100%);
+    user-select:none;-webkit-user-select:none;
   }
-  #hearts{position:fixed;inset:0;pointer-events:none;z-index:0;overflow:hidden}
-  .heart{position:absolute;bottom:-40px;opacity:.0;animation:subir linear forwards}
-  @keyframes subir{
-    0%{transform:translateY(0) translateX(0) rotate(0);opacity:0}
-    10%{opacity:.7}
-    100%{transform:translateY(-110vh) translateX(var(--dx)) rotate(30deg);opacity:0}
-  }
+  #c{position:fixed;inset:0;width:100%;height:100%}
+  .glow{position:fixed;left:50%;top:40%;width:80vmin;height:80vmin;transform:translate(-50%,-50%);
+    background:radial-gradient(circle,rgba(255,143,171,.22),transparent 65%);pointer-events:none;animation:resp 5s ease-in-out infinite}
+  @keyframes resp{50%{transform:translate(-50%,-50%) scale(1.15);opacity:.7}}
 
-  section{position:relative;z-index:1;min-height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:32px 20px;text-align:center}
+  #intro{position:fixed;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;
+    z-index:5;cursor:pointer;transition:opacity 1.2s,transform 1.2s}
+  #intro.off{opacity:0;transform:scale(1.15);pointer-events:none}
+  #intro h1{font-family:'Dancing Script',cursive;font-size:clamp(3.2rem,15vw,7rem);
+    background:linear-gradient(90deg,#ffd1dc,#ff8fab,#ffe29a,#ff8fab,#ffd1dc);background-size:300% 100%;
+    -webkit-background-clip:text;background-clip:text;color:transparent;animation:brillo 6s linear infinite;
+    filter:drop-shadow(0 0 18px rgba(255,143,171,.6))}
+  @keyframes brillo{to{background-position:300% 0}}
+  #intro p{margin-top:18px;font-size:1.05rem;opacity:.85;animation:late 2s ease-in-out infinite}
+  @keyframes late{50%{opacity:.35;transform:scale(.97)}}
 
-  /* ---------- portada ---------- */
-  #portada h1{font-family:'Dancing Script',cursive;font-size:clamp(2.6rem,10vw,4.5rem);color:var(--rosa2);text-shadow:0 3px 0 #fff;margin-bottom:8px}
-  #portada p{margin-bottom:28px;font-size:1.05rem}
-  .sobre{
-    width:min(280px,72vw);aspect-ratio:1.5;position:relative;cursor:pointer;
-    animation:flota 3s ease-in-out infinite;filter:drop-shadow(0 12px 18px rgba(255,143,171,.45));
-  }
-  @keyframes flota{50%{transform:translateY(-10px)}}
-  .sobre .cuerpo{position:absolute;inset:0;background:#fff;border-radius:10px;border:2px solid var(--rosa)}
-  .sobre .tapa{position:absolute;left:0;right:0;top:0;height:55%;background:var(--rosa);
-    clip-path:polygon(0 0,100% 0,50% 100%);border-radius:10px 10px 0 0}
-  .sobre .sello{position:absolute;left:50%;top:48%;transform:translate(-50%,-50%);font-size:2rem;z-index:2}
-  .sobre:hover{transform:scale(1.04)}
-  .hint{margin-top:22px;font-size:.95rem;opacity:.8}
+  #texto{position:fixed;left:50%;bottom:calc(8vh + env(safe-area-inset-bottom));transform:translateX(-50%);
+    width:min(560px,88vw);text-align:center;z-index:3;pointer-events:none}
+  #texto p{font-size:clamp(1.05rem,3.8vw,1.4rem);line-height:1.6;margin-bottom:10px;
+    text-shadow:0 2px 14px rgba(0,0,0,.45);min-height:1em}
+  #hint{position:fixed;bottom:calc(2.6vh + env(safe-area-inset-bottom));left:0;right:0;text-align:center;font-size:.85rem;
+    opacity:0;transition:opacity .6s;z-index:3;letter-spacing:.05em}
+  #hint.on{opacity:.75;animation:late 1.8s ease-in-out infinite}
 
-  /* ---------- carta ---------- */
-  #carta{display:none}
-  .papel{
-    width:min(620px,100%);background:var(--crema);border-radius:18px;padding:34px 28px 30px;text-align:left;
-    box-shadow:0 14px 40px rgba(255,143,171,.35);border:2px dashed var(--rosa);
-    animation:aparece 1s ease both;
-  }
-  @keyframes aparece{from{opacity:0;transform:translateY(30px) scale(.97)}to{opacity:1;transform:none}}
-  .papel h2{font-family:'Dancing Script',cursive;font-size:2.4rem;color:var(--rosa2);margin-bottom:14px}
-  .papel p{line-height:1.75;margin-bottom:14px;font-size:1.04rem;opacity:0;transform:translateY(10px);animation:aparece-p .8s ease forwards}
-  @keyframes aparece-p{to{opacity:1;transform:none}}
-  .papel p:nth-of-type(1){animation-delay:.5s}
-  .papel p:nth-of-type(2){animation-delay:1.3s}
-  .papel p:nth-of-type(3){animation-delay:2.1s}
-  .papel p:nth-of-type(4){animation-delay:2.9s}
-  .papel p:nth-of-type(5){animation-delay:3.7s}
-  .firma{font-family:'Dancing Script',cursive;font-size:1.7rem;color:var(--rosa2);margin-top:20px;text-align:right;opacity:0;animation:aparece-p .8s 4.6s ease forwards}
-  .firma small{display:block;font-family:'Quicksand',sans-serif;font-size:.8rem;color:var(--txt);opacity:.75;margin-top:4px}
-  .botones{margin-top:22px;display:flex;gap:10px;justify-content:center;flex-wrap:wrap;opacity:0;animation:aparece-p .8s 5.4s ease forwards}
-  .btn{
-    border:0;cursor:pointer;font:600 1rem 'Quicksand',sans-serif;padding:12px 22px;border-radius:999px;
-    background:var(--rosa2);color:#fff;box-shadow:0 6px 14px rgba(255,143,171,.5);transition:transform .15s;text-decoration:none;display:inline-block
-  }
-  .btn:hover{transform:scale(1.06)}
-  .btn.sec{background:#fff;color:var(--rosa2);border:2px solid var(--rosa)}
-  #respuesta{margin-top:16px;font-weight:600;min-height:1.5em;text-align:center}
+  #firma{position:fixed;left:0;right:0;bottom:calc(5vh + env(safe-area-inset-bottom));text-align:center;z-index:4;
+    opacity:0;transform:translateY(14px);transition:opacity 2s,transform 2s;pointer-events:none}
+  #firma.on{opacity:1;transform:none}
+  #firma .de{font-family:'Dancing Script',cursive;font-size:clamp(1.9rem,7vw,2.8rem);
+    background:linear-gradient(90deg,#ffd1dc,#ffe29a,#ff8fab);-webkit-background-clip:text;background-clip:text;color:transparent;
+    filter:drop-shadow(0 0 12px rgba(255,143,171,.7))}
+  #firma .sub{font-size:.95rem;opacity:.85;margin-top:2px}
 
-  /* musica */
-  #musica{position:fixed;right:14px;bottom:14px;z-index:10;display:none;width:46px;height:46px;border-radius:50%;
-    border:0;background:#fff;font-size:1.3rem;cursor:pointer;box-shadow:0 6px 14px rgba(255,143,171,.5)}
+  #musica{position:fixed;right:14px;top:calc(14px + env(safe-area-inset-top));z-index:10;width:44px;height:44px;border-radius:50%;
+    border:1px solid rgba(255,255,255,.35);background:rgba(255,255,255,.12);backdrop-filter:blur(6px);color:#fff;font-size:1.15rem;
+    cursor:pointer;display:none}
   #yt{position:fixed;left:-9999px;top:0;width:200px;height:200px}
 </style>
 </head>
 <body>
-<div id="hearts"></div>
+<div class="glow"></div>
+<canvas id="c"></canvas>
 <div id="yt"><div id="player"></div></div>
 
-<section id="portada">
-  <h1>Hola, Alejita 🌸</h1>
-  <p>Tengo algo para ti…</p>
-  <div class="sobre" id="sobre" role="button" tabindex="0" aria-label="Abrir carta">
-    <div class="cuerpo"></div><div class="tapa"></div><div class="sello">💌</div>
-  </div>
-  <p class="hint">Toca el sobre para abrirlo (con sonido 🎵)</p>
-</section>
+<div id="intro">
+  <h1>Hola, Alejita</h1>
+  <p>toca para empezar ✨ <small>(con sonido)</small></p>
+</div>
 
-<section id="carta">
-  <div class="papel">
-    <h2>Querida Alejita,</h2>
-    <p>Sé que esto es un poco inesperado, pero quería hacer algo diferente a un simple mensaje. Así que me puse creativo y armé esta paginita solo para ti. 😄</p>
-    <p>Primero que nada: <b>te debo una disculpa</b>. Dejamos de hablar y la culpa fue mía. No supe cuidar una conversación que de verdad me gustaba, y lo lamento mucho.</p>
-    <p>Aunque nunca nos hemos visto en persona, hablar contigo siempre me sacaba una sonrisa, y la verdad me quedé con ganas de seguir conociéndote: tus gustos, tus risas, tus historias y todo eso que hace que seas tú.</p>
-    <p>Por eso me gustaría volver a hablar contigo, sin presión y a tu ritmo. Saber cómo has estado y conocerte un poquito más cada día. Y quién sabe… quizás algún día la vida nos sorprenda con algo más. 🌷</p>
-    <p>Si me das otra oportunidad, prometo hacerlo mucho mejor. Y si no, igual gracias por leer hasta aquí. 💗</p>
-    <div class="firma">Con cariño,<br>David 🌼<small>(tu pretendiente secreto, jajaja 🤫)</small></div>
-    <div class="botones">
-      <button class="btn" id="si">Sí, hablemos 💬</button>
-      <button class="btn sec" id="pensar">Déjame pensarlo 🤔</button>
-    </div>
-    <div id="respuesta"></div>
-  </div>
-</section>
-
+<div id="texto"></div>
+<div id="firma"><div class="de">De parte de David,</div><div class="sub">tu pretendiente secreto 🤫</div></div>
+<div id="hint">toca para seguir</div>
 <button id="musica" title="Música">🎵</button>
 
 <script>
-  // corazones flotantes
-  const cont = document.getElementById('hearts');
-  const emojis = ['💗','🌸','💕','✨','🌷','💖'];
-  function corazon(){
-    const h = document.createElement('div');
-    h.className='heart';
-    h.textContent = emojis[Math.floor(Math.random()*emojis.length)];
-    h.style.left = Math.random()*100+'vw';
-    h.style.fontSize = (14+Math.random()*22)+'px';
-    h.style.setProperty('--dx',(Math.random()*120-60)+'px');
-    h.style.animationDuration = (7+Math.random()*7)+'s';
-    cont.appendChild(h);
-    setTimeout(()=>h.remove(),15000);
+const cv=document.getElementById('c'),ctx=cv.getContext('2d');
+let W,H,DPR,cur=-1,mx=-999,my=-999,t0=performance.now();
+const rnd=(a,b)=>a+Math.random()*(b-a);
+
+/* ---------- escenas ---------- */
+const scenes=[
+  {shape:{k:'text',v:'Alejita'},grad:['#1b0f2e','#3b1a55','#7a3a78'],
+   lines:['Hice esto solo para ti 🌸']},
+  {shape:{k:'text',v:'Perdón'},grad:['#10122e','#262a5c','#4b4a8f'],
+   lines:['Dejamos de hablar y la culpa fue mía.','No supe cuidar una conversación que de verdad me gustaba. Lo siento mucho.']},
+  {shape:{k:'smile'},grad:['#2a1442','#6b2d73','#c4568a'],
+   lines:['Aunque nunca nos hemos visto en persona, hablar contigo siempre me sacaba una sonrisa.']},
+  {shape:{k:'heart'},grad:['#3a1245','#8a2f78','#ff7aa2'],
+   lines:['Me encantaría volver a hablar contigo, saber cómo has estado y conocerte un poquito más…','sin presión y a tu ritmo.']},
+  {shape:{k:'text',v:'¿Quién sabe?'},grad:['#1d1b45','#4b3a8a','#c9a0ff'],
+   lines:['Quizás algún día la vida nos sorprenda con algo más 🌷']},
+  {shape:{k:'heart'},final:true,grad:['#3a1245','#a23a7a','#ffb36b'],
+   lines:['Gracias por leer hasta aquí 💗']}
+];
+
+/* ---------- canvas / partículas ---------- */
+let P=[],bg=[],FW=[],N=1800;
+function resize(){
+  DPR=Math.min(window.devicePixelRatio||1,2);W=innerWidth;H=innerHeight;
+  cv.width=W*DPR;cv.height=H*DPR;ctx.setTransform(DPR,0,0,DPR,0,0);
+  N=W<600?1100:1900;
+  if(cur>=0)setShape(scenes[cur].shape,false);
+}
+function hueRnd(){const r=Math.random();return r<.45?rnd(335,350):r<.7?rnd(300,325):r<.85?rnd(270,290):rnd(38,50)}
+function init(){
+  resize();
+  P=[];for(let i=0;i<N;i++)P.push({x:rnd(0,W),y:rnd(0,H),vx:0,vy:0,tx:0,ty:0,has:false,h:hueRnd(),s:rnd(.8,2.1),ph:rnd(0,6.28)});
+  bg=[];for(let i=0;i<130;i++)bg.push({x:rnd(0,W),y:rnd(0,H),r:rnd(.4,1.5),ph:rnd(0,6.28),sp:rnd(.001,.004)});
+}
+
+function sample(shape){
+  const cvs=document.createElement('canvas');cvs.width=W;cvs.height=H;
+  const g=cvs.getContext('2d');g.fillStyle='#fff';g.strokeStyle='#fff';g.textAlign='center';g.textBaseline='middle';
+  const cx=W/2,cy=H*.37,u=Math.min(W,H*1.1);
+  if(shape.k==='text'){
+    let size=Math.min(H*.3,W*.5);
+    g.font=`700 ${size}px 'Dancing Script',cursive`;
+    const w=g.measureText(shape.v).width,maxW=W*.88;
+    if(w>maxW){size*=maxW/w;g.font=`700 ${size}px 'Dancing Script',cursive`}
+    g.fillText(shape.v,cx,cy);
+  }else if(shape.k==='heart'){
+    const s=u*.026;g.beginPath();
+    for(let a=0;a<=Math.PI*2+.05;a+=.02){
+      const x=16*Math.pow(Math.sin(a),3),y=-(13*Math.cos(a)-5*Math.cos(2*a)-2*Math.cos(3*a)-Math.cos(4*a));
+      a===0?g.moveTo(cx+x*s,cy+y*s):g.lineTo(cx+x*s,cy+y*s);
+    }
+    g.fill();
+  }else if(shape.k==='smile'){
+    const r=u*.27;g.lineWidth=u*.035;g.lineCap='round';
+    g.beginPath();g.arc(cx,cy,r,0,Math.PI*2);g.stroke();
+    g.beginPath();g.arc(cx-r*.36,cy-r*.2,r*.1,0,Math.PI*2);g.fill();
+    g.beginPath();g.arc(cx+r*.36,cy-r*.2,r*.1,0,Math.PI*2);g.fill();
+    g.beginPath();g.arc(cx,cy+r*.05,r*.55,.15*Math.PI,.85*Math.PI);g.stroke();
   }
-  setInterval(corazon,500);
-  for(let i=0;i<8;i++) setTimeout(corazon,i*150);
+  const d=g.getImageData(0,0,W,H).data,pts=[],step=W<600?3:3;
+  for(let y=0;y<H;y+=step)for(let x=0;x<W;x+=step)if(d[(y*W+x)*4+3]>128)pts.push([x,y]);
+  for(let i=pts.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[pts[i],pts[j]]=[pts[j],pts[i]]}
+  return pts;
+}
+function setShape(shape,burst){
+  const pts=sample(shape);
+  P.forEach((p,i)=>{
+    if(i<pts.length){p.tx=pts[i][0];p.ty=pts[i][1];p.has=true}else p.has=false;
+    if(burst){const a=rnd(0,6.28),f=rnd(2,9);p.vx+=Math.cos(a)*f;p.vy+=Math.sin(a)*f}
+  });
+}
 
-  // YouTube (musica de fondo)
-  let player, listo=false, quiereSonar=false, sonando=false;
-  const tag=document.createElement('script');
-  tag.src='https://www.youtube.com/iframe_api';
-  document.head.appendChild(tag);
-  window.onYouTubeIframeAPIReady=function(){
-    player=new YT.Player('player',{
-      height:'200',width:'200',videoId:'vfnyQHdiNs0',
-      playerVars:{playsinline:1,loop:1,playlist:'vfnyQHdiNs0',controls:0},
-      events:{onReady:()=>{listo=true;if(quiereSonar)player.playVideo()},
-              onStateChange:e=>{sonando=(e.data===YT.PlayerState.PLAYING);
-                document.getElementById('musica').textContent=sonando?'🎵':'🔇'}}
-    });
-  };
-  function reproducir(){quiereSonar=true;if(listo){player.setVolume(60);player.playVideo()}}
-
-  // abrir sobre
-  function abrir(){
-    reproducir();
-    document.getElementById('portada').style.display='none';
-    document.getElementById('carta').style.display='flex';
-    document.getElementById('musica').style.display='block';
-    window.scrollTo(0,0);
-    for(let i=0;i<14;i++) setTimeout(corazon,i*80);
+function spark(x,y,n,big){
+  for(let i=0;i<n;i++){
+    const a=rnd(0,6.28),f=rnd(1,big?7:3.5);
+    FW.push({x,y,vx:Math.cos(a)*f,vy:Math.sin(a)*f,life:1,dec:rnd(.008,.02),h:hueRnd(),s:rnd(1,2.4)});
   }
-  const sobre=document.getElementById('sobre');
-  sobre.addEventListener('click',abrir);
-  sobre.addEventListener('keydown',e=>{if(e.key==='Enter'||e.key===' ')abrir()});
+}
+let fwTimer=null;
+function startFireworks(){
+  stopFireworks();
+  fwTimer=setInterval(()=>spark(rnd(W*.1,W*.9),rnd(H*.08,H*.5),70,true),650);
+}
+function stopFireworks(){clearInterval(fwTimer);fwTimer=null}
 
-  document.getElementById('musica').addEventListener('click',()=>{
-    if(!listo)return; sonando?player.pauseVideo():player.playVideo();
-  });
+function frame(now){
+  const t=now-t0;
+  ctx.clearRect(0,0,W,H);
+  ctx.globalCompositeOperation='lighter';
+  // estrellas de fondo
+  for(const s of bg){
+    const a=.35+.35*Math.sin(t*s.sp+s.ph);
+    ctx.fillStyle=`rgba(255,240,250,${a})`;ctx.beginPath();ctx.arc(s.x,s.y,s.r,0,6.283);ctx.fill();
+  }
+  const pulse=scenes[cur]&&scenes[cur].final?1+.035*Math.sin(t/280):1;
+  const cx=W/2,cy=H*.37;
+  for(const p of P){
+    let ax=0,ay=0,damp=.88;
+    if(p.has){
+      const tx=cx+(p.tx-cx)*pulse,ty=cy+(p.ty-cy)*pulse;
+      ax=(tx-p.x)*.05;ay=(ty-p.y)*.05;
+      ax+=Math.sin(t*.002+p.ph)*.05;ay+=Math.cos(t*.0022+p.ph)*.05;
+    }else{
+      ax=Math.sin(t*.0004+p.ph)*.012;ay=Math.cos(t*.0005+p.ph*1.3)*.012-.004;damp=.96;
+    }
+    const dx=p.x-mx,dy=p.y-my,d2=dx*dx+dy*dy;
+    if(d2<8100){const d=Math.sqrt(d2)||1,f=(1-d/90)*3.2;ax+=dx/d*f;ay+=dy/d*f}
+    p.vx=(p.vx+ax)*damp;p.vy=(p.vy+ay)*damp;p.x+=p.vx;p.y+=p.vy;
+    if(!p.has){if(p.x<-10)p.x=W+10;if(p.x>W+10)p.x=-10;if(p.y<-10)p.y=H+10;if(p.y>H+10)p.y=-10}
+    const al=p.has?.95:.25+.2*Math.sin(t*.003+p.ph);
+    ctx.fillStyle=`hsla(${p.h},95%,${p.has?72:80}%,${al})`;
+    ctx.beginPath();ctx.arc(p.x,p.y,p.has?p.s:p.s*.8,0,6.283);ctx.fill();
+  }
+  // chispas / fuegos artificiales
+  for(let i=FW.length-1;i>=0;i--){
+    const f=FW[i];f.vy+=.04;f.vx*=.985;f.vy*=.985;f.x+=f.vx;f.y+=f.vy;f.life-=f.dec;
+    if(f.life<=0){FW.splice(i,1);continue}
+    ctx.fillStyle=`hsla(${f.h},100%,75%,${f.life})`;ctx.beginPath();ctx.arc(f.x,f.y,f.s*f.life+.3,0,6.283);ctx.fill();
+  }
+  ctx.globalCompositeOperation='source-over';
+  requestAnimationFrame(frame);
+}
 
-  const resp=document.getElementById('respuesta');
-  document.getElementById('si').addEventListener('click',()=>{
-    resp.textContent='¡Yay! 🎉 Entonces cuando quieras me escribes y empezamos de nuevo 💗';
-    for(let i=0;i<30;i++) setTimeout(corazon,i*60);
-  });
-  document.getElementById('pensar').addEventListener('click',()=>{
-    resp.textContent='Tómate tu tiempo, sin presión 🌷 Aquí estaré.';
-  });
+/* ---------- texto ---------- */
+const box=document.getElementById('texto'),hint=document.getElementById('hint'),firma=document.getElementById('firma');
+let typing=false,tTimer,pendingFull=null,showTimer;
+function showText(lines,final){
+  clearTimeout(tTimer);box.innerHTML='';hint.classList.remove('on');firma.classList.remove('on');
+  const ps=lines.map(()=>{const p=document.createElement('p');box.appendChild(p);return p});
+  const chars=lines.map(l=>Array.from(l));let li=0,ci=0;typing=true;
+  const done=()=>{typing=false;pendingFull=null;if(final)firma.classList.add('on');else hint.classList.add('on')};
+  pendingFull=()=>{clearTimeout(tTimer);lines.forEach((l,i)=>ps[i].textContent=l);done()};
+  (function step(){
+    if(li>=lines.length){done();return}
+    if(ci<chars[li].length){ps[li].textContent+=chars[li][ci++];tTimer=setTimeout(step,32)}
+    else{li++;ci=0;tTimer=setTimeout(step,500)}
+  })();
+}
+
+/* ---------- flujo ---------- */
+function go(i){
+  cur=i;const s=scenes[i];
+  document.documentElement.style.setProperty('--c1',s.grad[0]);
+  document.documentElement.style.setProperty('--c2',s.grad[1]);
+  document.documentElement.style.setProperty('--c3',s.grad[2]);
+  box.innerHTML='';hint.classList.remove('on');firma.classList.remove('on');typing=true;pendingFull=null;
+  stopFireworks();
+  setShape(s.shape,true);
+  if(s.final)setTimeout(startFireworks,1200);
+  clearTimeout(showTimer);showTimer=setTimeout(()=>showText(s.lines,s.final),1100);
+}
+function next(){
+  if(cur<0)return;
+  if(pendingFull){pendingFull();return}
+  if(typing)return;
+  if(cur<scenes.length-1)go(cur+1);
+}
+
+/* ---------- música (YouTube) ---------- */
+let player,listo=false,quiere=false;
+const tag=document.createElement('script');tag.src='https://www.youtube.com/iframe_api';document.head.appendChild(tag);
+window.onYouTubeIframeAPIReady=()=>{
+  player=new YT.Player('player',{height:'200',width:'200',videoId:'vfnyQHdiNs0',
+    playerVars:{playsinline:1,loop:1,playlist:'vfnyQHdiNs0',controls:0},
+    events:{onReady:()=>{listo=true;if(quiere){player.setVolume(65);player.playVideo()}},
+            onStateChange:e=>{document.getElementById('musica').textContent=(e.data===YT.PlayerState.PLAYING)?'🎵':'🔇'}}});
+};
+const mbtn=document.getElementById('musica');
+mbtn.addEventListener('pointerdown',e=>e.stopPropagation());
+mbtn.addEventListener('click',()=>{if(!listo)return;player.getPlayerState()===1?player.pauseVideo():player.playVideo()});
+
+/* ---------- eventos ---------- */
+const intro=document.getElementById('intro');
+function empezar(){
+  if(cur>=0)return;
+  quiere=true;if(listo){player.setVolume(65);player.playVideo()}
+  intro.classList.add('off');mbtn.style.display='block';
+  spark(W/2,H*.4,120,true);
+  setTimeout(()=>go(0),700);
+}
+document.addEventListener('pointerdown',e=>{
+  mx=e.clientX;my=e.clientY;
+  if(cur<0){empezar();return}
+  spark(e.clientX,e.clientY,16,false);next();
+});
+document.addEventListener('pointermove',e=>{mx=e.clientX;my=e.clientY});
+document.addEventListener('pointerup',()=>{setTimeout(()=>{if(matchMedia('(hover:none)').matches){mx=-999;my=-999}},250)});
+document.addEventListener('keydown',e=>{if(e.key==='Enter'||e.key===' '||e.key==='ArrowRight'){cur<0?empezar():next()}});
+window.addEventListener('resize',resize);
+
+(document.fonts&&document.fonts.load?document.fonts.load("700 80px 'Dancing Script'").catch(()=>{}):Promise.resolve()).then(()=>{
+  init();requestAnimationFrame(frame);
+});
 </script>
 </body>
 </html>

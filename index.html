@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Para Alejita 🌸</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@600;700&family=Quicksand:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --rosa:#ffb6c8; --rosa2:#ff8fab; --crema:#fff6f0; --lila:#e8d5ff; --txt:#6b3a4a;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  html,body{min-height:100%}
+  body{
+    font-family:'Quicksand',sans-serif; color:var(--txt);
+    background:linear-gradient(160deg,#ffe3ec 0%,#fff0e6 45%,#ecdcff 100%);
+    background-attachment:fixed; overflow-x:hidden;
+  }
+  #hearts{position:fixed;inset:0;pointer-events:none;z-index:0;overflow:hidden}
+  .heart{position:absolute;bottom:-40px;opacity:.0;animation:subir linear forwards}
+  @keyframes subir{
+    0%{transform:translateY(0) translateX(0) rotate(0);opacity:0}
+    10%{opacity:.7}
+    100%{transform:translateY(-110vh) translateX(var(--dx)) rotate(30deg);opacity:0}
+  }
+
+  section{position:relative;z-index:1;min-height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:32px 20px;text-align:center}
+
+  /* ---------- portada ---------- */
+  #portada h1{font-family:'Dancing Script',cursive;font-size:clamp(2.6rem,10vw,4.5rem);color:var(--rosa2);text-shadow:0 3px 0 #fff;margin-bottom:8px}
+  #portada p{margin-bottom:28px;font-size:1.05rem}
+  .sobre{
+    width:min(280px,72vw);aspect-ratio:1.5;position:relative;cursor:pointer;
+    animation:flota 3s ease-in-out infinite;filter:drop-shadow(0 12px 18px rgba(255,143,171,.45));
+  }
+  @keyframes flota{50%{transform:translateY(-10px)}}
+  .sobre .cuerpo{position:absolute;inset:0;background:#fff;border-radius:10px;border:2px solid var(--rosa)}
+  .sobre .tapa{position:absolute;left:0;right:0;top:0;height:55%;background:var(--rosa);
+    clip-path:polygon(0 0,100% 0,50% 100%);border-radius:10px 10px 0 0}
+  .sobre .sello{position:absolute;left:50%;top:48%;transform:translate(-50%,-50%);font-size:2rem;z-index:2}
+  .sobre:hover{transform:scale(1.04)}
+  .hint{margin-top:22px;font-size:.95rem;opacity:.8}
+
+  /* ---------- carta ---------- */
+  #carta{display:none}
+  .papel{
+    width:min(620px,100%);background:var(--crema);border-radius:18px;padding:34px 28px 30px;text-align:left;
+    box-shadow:0 14px 40px rgba(255,143,171,.35);border:2px dashed var(--rosa);
+    animation:aparece 1s ease both;
+  }
+  @keyframes aparece{from{opacity:0;transform:translateY(30px) scale(.97)}to{opacity:1;transform:none}}
+  .papel h2{font-family:'Dancing Script',cursive;font-size:2.4rem;color:var(--rosa2);margin-bottom:14px}
+  .papel p{line-height:1.75;margin-bottom:14px;font-size:1.04rem;opacity:0;transform:translateY(10px);animation:aparece-p .8s ease forwards}
+  @keyframes aparece-p{to{opacity:1;transform:none}}
+  .papel p:nth-of-type(1){animation-delay:.5s}
+  .papel p:nth-of-type(2){animation-delay:1.3s}
+  .papel p:nth-of-type(3){animation-delay:2.1s}
+  .papel p:nth-of-type(4){animation-delay:2.9s}
+  .papel p:nth-of-type(5){animation-delay:3.7s}
+  .firma{font-family:'Dancing Script',cursive;font-size:1.7rem;color:var(--rosa2);margin-top:20px;text-align:right;opacity:0;animation:aparece-p .8s 4.6s ease forwards}
+  .firma small{display:block;font-family:'Quicksand',sans-serif;font-size:.8rem;color:var(--txt);opacity:.75;margin-top:4px}
+  .botones{margin-top:22px;display:flex;gap:10px;justify-content:center;flex-wrap:wrap;opacity:0;animation:aparece-p .8s 5.4s ease forwards}
+  .btn{
+    border:0;cursor:pointer;font:600 1rem 'Quicksand',sans-serif;padding:12px 22px;border-radius:999px;
+    background:var(--rosa2);color:#fff;box-shadow:0 6px 14px rgba(255,143,171,.5);transition:transform .15s;text-decoration:none;display:inline-block
+  }
+  .btn:hover{transform:scale(1.06)}
+  .btn.sec{background:#fff;color:var(--rosa2);border:2px solid var(--rosa)}
+  #respuesta{margin-top:16px;font-weight:600;min-height:1.5em;text-align:center}
+
+  /* musica */
+  #musica{position:fixed;right:14px;bottom:14px;z-index:10;display:none;width:46px;height:46px;border-radius:50%;
+    border:0;background:#fff;font-size:1.3rem;cursor:pointer;box-shadow:0 6px 14px rgba(255,143,171,.5)}
+  #yt{position:fixed;left:-9999px;top:0;width:200px;height:200px}
+</style>
+</head>
+<body>
+<div id="hearts"></div>
+<div id="yt"><div id="player"></div></div>
+
+<section id="portada">
+  <h1>Hola, Alejita 🌸</h1>
+  <p>Tengo algo para ti…</p>
+  <div class="sobre" id="sobre" role="button" tabindex="0" aria-label="Abrir carta">
+    <div class="cuerpo"></div><div class="tapa"></div><div class="sello">💌</div>
+  </div>
+  <p class="hint">Toca el sobre para abrirlo (con sonido 🎵)</p>
+</section>
+
+<section id="carta">
+  <div class="papel">
+    <h2>Querida Alejita,</h2>
+    <p>Sé que esto es un poco inesperado, pero quería hacer algo diferente a un simple mensaje. Así que me puse creativo y armé esta paginita solo para ti. 😄</p>
+    <p>Primero que nada: <b>te debo una disculpa</b>. Dejamos de hablar y la culpa fue mía. No supe cuidar una conversación que de verdad me gustaba, y lo lamento mucho.</p>
+    <p>Aunque nunca nos hemos visto en persona, hablar contigo siempre me sacaba una sonrisa, y la verdad me quedé con ganas de seguir conociéndote: tus gustos, tus risas, tus historias y todo eso que hace que seas tú.</p>
+    <p>Por eso me gustaría volver a hablar contigo, sin presión y a tu ritmo. Saber cómo has estado y conocerte un poquito más cada día. Y quién sabe… quizás algún día la vida nos sorprenda con algo más. 🌷</p>
+    <p>Si me das otra oportunidad, prometo hacerlo mucho mejor. Y si no, igual gracias por leer hasta aquí. 💗</p>
+    <div class="firma">Con cariño,<br>David 🌼<small>(tu pretendiente secreto, jajaja 🤫)</small></div>
+    <div class="botones">
+      <button class="btn" id="si">Sí, hablemos 💬</button>
+      <button class="btn sec" id="pensar">Déjame pensarlo 🤔</button>
+    </div>
+    <div id="respuesta"></div>
+  </div>
+</section>
+
+<button id="musica" title="Música">🎵</button>
+
+<script>
+  // corazones flotantes
+  const cont = document.getElementById('hearts');
+  const emojis = ['💗','🌸','💕','✨','🌷','💖'];
+  function corazon(){
+    const h = document.createElement('div');
+    h.className='heart';
+    h.textContent = emojis[Math.floor(Math.random()*emojis.length)];
+    h.style.left = Math.random()*100+'vw';
+    h.style.fontSize = (14+Math.random()*22)+'px';
+    h.style.setProperty('--dx',(Math.random()*120-60)+'px');
+    h.style.animationDuration = (7+Math.random()*7)+'s';
+    cont.appendChild(h);
+    setTimeout(()=>h.remove(),15000);
+  }
+  setInterval(corazon,500);
+  for(let i=0;i<8;i++) setTimeout(corazon,i*150);
+
+  // YouTube (musica de fondo)
+  let player, listo=false, quiereSonar=false, sonando=false;
+  const tag=document.createElement('script');
+  tag.src='https://www.youtube.com/iframe_api';
+  document.head.appendChild(tag);
+  window.onYouTubeIframeAPIReady=function(){
+    player=new YT.Player('player',{
+      height:'200',width:'200',videoId:'vfnyQHdiNs0',
+      playerVars:{playsinline:1,loop:1,playlist:'vfnyQHdiNs0',controls:0},
+      events:{onReady:()=>{listo=true;if(quiereSonar)player.playVideo()},
+              onStateChange:e=>{sonando=(e.data===YT.PlayerState.PLAYING);
+                document.getElementById('musica').textContent=sonando?'🎵':'🔇'}}
+    });
+  };
+  function reproducir(){quiereSonar=true;if(listo){player.setVolume(60);player.playVideo()}}
+
+  // abrir sobre
+  function abrir(){
+    reproducir();
+    document.getElementById('portada').style.display='none';
+    document.getElementById('carta').style.display='flex';
+    document.getElementById('musica').style.display='block';
+    window.scrollTo(0,0);
+    for(let i=0;i<14;i++) setTimeout(corazon,i*80);
+  }
+  const sobre=document.getElementById('sobre');
+  sobre.addEventListener('click',abrir);
+  sobre.addEventListener('keydown',e=>{if(e.key==='Enter'||e.key===' ')abrir()});
+
+  document.getElementById('musica').addEventListener('click',()=>{
+    if(!listo)return; sonando?player.pauseVideo():player.playVideo();
+  });
+
+  const resp=document.getElementById('respuesta');
+  document.getElementById('si').addEventListener('click',()=>{
+    resp.textContent='¡Yay! 🎉 Entonces cuando quieras me escribes y empezamos de nuevo 💗';
+    for(let i=0;i<30;i++) setTimeout(corazon,i*60);
+  });
+  document.getElementById('pensar').addEventListener('click',()=>{
+    resp.textContent='Tómate tu tiempo, sin presión 🌷 Aquí estaré.';
+  });
+</script>
+</body>
+</html>

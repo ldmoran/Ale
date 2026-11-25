@@ -1,0 +1,6 @@
+services:
+  - type: web
+    name: para-alejita
+    runtime: static
+    staticPublishPath: .
+    pullRequestPreviewsEnabled: false

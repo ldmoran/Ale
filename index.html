@@ -39,6 +39,7 @@
     width:min(560px,88vw);text-align:center;z-index:3;pointer-events:none}
   #texto p{font-size:clamp(1.05rem,3.8vw,1.4rem);line-height:1.6;margin-bottom:10px;
     text-shadow:0 2px 14px rgba(0,0,0,.45);min-height:1em}
+  #texto.final{bottom:calc(21vh + env(safe-area-inset-bottom))}
   #hint{position:fixed;bottom:calc(2.6vh + env(safe-area-inset-bottom));left:0;right:0;text-align:center;font-size:.85rem;
     opacity:0;transition:opacity .6s;z-index:3;letter-spacing:.05em}
   #hint.on{opacity:.75;animation:late 1.8s ease-in-out infinite}
@@ -198,12 +199,12 @@ function frame(now){
 
 /* ---------- texto ---------- */
 const box=document.getElementById('texto'),hint=document.getElementById('hint'),firma=document.getElementById('firma');
-let typing=false,tTimer,pendingFull=null,showTimer;
+let typing=false,tTimer,pendingFull=null,showTimer,autoT;
 function showText(lines,final){
   clearTimeout(tTimer);box.innerHTML='';hint.classList.remove('on');firma.classList.remove('on');
   const ps=lines.map(()=>{const p=document.createElement('p');box.appendChild(p);return p});
   const chars=lines.map(l=>Array.from(l));let li=0,ci=0;typing=true;
-  const done=()=>{typing=false;pendingFull=null;if(final)firma.classList.add('on');else hint.classList.add('on')};
+  const done=()=>{typing=false;pendingFull=null;if(final){firma.classList.add('on')}else{const n=lines.join('').length;clearTimeout(autoT);autoT=setTimeout(()=>{if(cur<scenes.length-1)go(cur+1)},2800+n*45)}};
   pendingFull=()=>{clearTimeout(tTimer);lines.forEach((l,i)=>ps[i].textContent=l);done()};
   (function step(){
     if(li>=lines.length){done();return}
@@ -214,11 +215,11 @@ function showText(lines,final){
 
 /* ---------- flujo ---------- */
 function go(i){
-  cur=i;const s=scenes[i];
+  clearTimeout(autoT);cur=i;const s=scenes[i];
   document.documentElement.style.setProperty('--c1',s.grad[0]);
   document.documentElement.style.setProperty('--c2',s.grad[1]);
   document.documentElement.style.setProperty('--c3',s.grad[2]);
-  box.innerHTML='';hint.classList.remove('on');firma.classList.remove('on');typing=true;pendingFull=null;
+  box.innerHTML='';box.classList.toggle('final',!!s.final);hint.classList.remove('on');firma.classList.remove('on');typing=true;pendingFull=null;
   stopFireworks();
   setShape(s.shape,true);
   if(s.final)setTimeout(startFireworks,1200);
@@ -256,11 +257,11 @@ function empezar(){
 document.addEventListener('pointerdown',e=>{
   mx=e.clientX;my=e.clientY;
   if(cur<0){empezar();return}
-  spark(e.clientX,e.clientY,16,false);next();
+  spark(e.clientX,e.clientY,16,false);
 });
 document.addEventListener('pointermove',e=>{mx=e.clientX;my=e.clientY});
 document.addEventListener('pointerup',()=>{setTimeout(()=>{if(matchMedia('(hover:none)').matches){mx=-999;my=-999}},250)});
-document.addEventListener('keydown',e=>{if(e.key==='Enter'||e.key===' '||e.key==='ArrowRight'){cur<0?empezar():next()}});
+document.addEventListener('keydown',e=>{if(cur<0&&(e.key==='Enter'||e.key===' '))empezar()});
 window.addEventListener('resize',resize);
 
 (document.fonts&&document.fonts.load?document.fonts.load("700 80px 'Dancing Script'").catch(()=>{}):Promise.resolve()).then(()=>{
